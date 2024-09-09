@@ -1,29 +1,36 @@
 let inputBox = document.getElementById("task__input");
 let tasksList = document.getElementById("tasks__list");
+const form = document.getElementById('tasks__form');
 
-const removeTask = e => {
-	e.target.closest(".task").remove();
-}
+const addTask = () => {
 
-const addTask = e => {
-	tasksList.innerHTML +=
-		`<div class="task">
-      <div class="task__title">
-        ${inputBox.value}
-      </div>
-      <a href="#" class="task__remove">&times;</a>
-    </div>`;
+	const inputText = inputBox.value.trim();
 
-	inputBox.value = "";
+	if(inputText == '') {
+		return;
+	}
 
-  [...(tasksList.getElementsByClassName("task__remove"))].forEach(element => {
-		element.addEventListener("click", removeTask)
-	});
+	const task = document.createElement('div')
+	task.classList.add('task');	
 
-	e.preventDefault();
+	const taskTitle = document.createElement('div')
+	taskTitle.classList.add('task__title');
+	taskTitle.innerText = inputText;
+	task.append(taskTitle);
+
+	const closeLink = document.createElement('a');
+	closeLink.classList.add('task__remove');
+	closeLink.attributes.href = '#'
+	closeLink.innerHTML = '&times;';
+	closeLink.addEventListener('click', () => {
+		task.remove();
+	})	
+	task.append(closeLink);
+
+	tasksList.append(task);
+
+	form.reset();
+
 }
 
 document.getElementById("tasks__add").addEventListener("click", addTask);
-inputBox.addEventListener("keypress", e => {
-	if (e.key == 13) addTask(e);
-});

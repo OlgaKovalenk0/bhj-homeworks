@@ -2,7 +2,8 @@ let inputBox = document.getElementById("task__input");
 let tasksList = document.getElementById("tasks__list");
 const form = document.getElementById('tasks__form');
 
-const addTask = () => {
+const addTask = (event) => {
+	event.preventDefault();
 
 	const inputText = inputBox.value.trim();
 
@@ -10,24 +11,21 @@ const addTask = () => {
 		return;
 	}
 
-	const task = document.createElement('div')
-	task.classList.add('task');	
+	tasksList.insertAdjacentHTML('afterbegin', `
+		<div class="task">
+		  <div class="task__title">
+			${inputText}
+		  </div>
+		  <a href="#" class="task__remove">&times;</a>
+		</div>
+		`);
 
-	const taskTitle = document.createElement('div')
-	taskTitle.classList.add('task__title');
-	taskTitle.innerText = inputText;
-	task.append(taskTitle);
-
-	const closeLink = document.createElement('a');
-	closeLink.classList.add('task__remove');
-	closeLink.attributes.href = '#'
-	closeLink.innerHTML = '&times;';
-	closeLink.addEventListener('click', () => {
+	const task = document.querySelector('.task:first-child');
+	
+	const closeButton = task.querySelector('.task__remove');	
+	closeButton.addEventListener('click', () => {
 		task.remove();
-	})	
-	task.append(closeLink);
-
-	tasksList.append(task);
+	});
 
 	form.reset();
 
